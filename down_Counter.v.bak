@@ -1,0 +1,10 @@
+//Gabriel Altman
+//ECEN2350 Digital Logic
+//April, 2018
+
+module down_Counter(clock, LSFR, downCount_Complete);
+
+input clock;
+input LSFR;
+
+output reg downCount_Complete;

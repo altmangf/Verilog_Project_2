@@ -1,0 +1,8 @@
+//Gabriel Altman
+//ECEN2350 Digital Logic
+//April, 2018
+
+module LFSR(KEY0, LFSROutput);
+
+input KEY0;
+output LFSROutput;
