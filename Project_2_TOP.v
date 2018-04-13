@@ -49,27 +49,27 @@ wire [1:0]down_CounterEnable;					//boolean to enable the down_Counter
 assign ENABLE[0] = SW[0];
 assign RESET[0] = !KEY[0];
 
-//Instantiate an instance of SevenSegment.v
+//Instantiates an instance of SevenSegment.v
 //This is the decoder which translates BCD values into binary values that light the correct segments in the 7-segment display
 BCD_decoder decoder_INST1(BCD0[3:0], BCD1[3:0], BCD2[3:0], BCD3[3:0], HEX0[6:0], HEX1[6:0], HEX2[6:0], HEX3[6:0]);
 
-//Instantiate an instance of BCD_counter.v
+//Instantiates an instance of BCD_counter.v
 //This code generates the values which generate numbers 1-9 for the seven-segment displays
 BCD_counter BCD_Count_INST1(divided_Clock, RESET, ENABLE, BCD3, BCD2, BCD1, BCD0);
 
-//Instantiate an instance of Clock_divider
+//Instantiates an instance of Clock_divider
 //This clock divides the native 50MHz clock by 25,000 to yield a 2kHz clock
 clock_Divider clk_Div_INST1(MAX10_CLK1_50, divided_Clock);
 
-//Instantiate an instance of Slow_Clock
+//Instantiates an instance of Slow_Clock
 //This clock divides the native 50MHz clock by 50,000,000 to yield a 1Hz clock
 Slow_Clock Slow_Clock_INST1(MAX10_CLK1_50, Slow_Clock);
 
-//Instantiate an instance  of LFSR 
+//Instantiates an instance  of LFSR 
 //Generates pseudo random numbers to set the delay between pressing the start button, and the start of the timer/start indicator light
 LFSR LFSR_INST1(Slow_Clock, LFSR_Value);
 
-//instantiate an instance of down_Counter
+//instantiates an instance of down_Counter
 //down_Counter down_Counter_INST1(Slow_Clock, LFSR_Value, RESET, ENABLE, count, downCount_Complete);
 down_Counter down_Counter_INST1(Slow_Clock, 8'b00000011, RESET, ENABLE, count, downCount_Complete);
 
