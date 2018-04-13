@@ -44,10 +44,22 @@ wire [1:0]downCount_Complete;					//boolean indicating the down_Counter has comp
 wire [7:0]count;									//the value returned by the down_Counter showing the current value
 wire [1:0]counter_Enable;						//boolean to enable the counter
 wire [1:0]down_CounterEnable;					//boolean to enable the down_Counter
-
+wire [15:0]highScore;							//High score
 
 assign ENABLE[0] = SW[0];
-assign RESET[0] = !KEY[0];
+assign RESET[0] = !KEY[0];					//Toggles the RESET boolean
+assign HEX0[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
+assign HEX1[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
+assign HEX2[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
+assign HEX3[7] = 1'b0;						//Turns ON the decimal point for the 7-segment display
+assign HEX4[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
+assign HEX5[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
+assign HEX4 = 8'b11111111;					//Blanks digit 4 of the 7-segment display
+assign HEX5 = 8'b11111111;					//Blanks digit 5 of the 7-segment display
+assign LEDR[9] = !KEY[0];					//TEMPORARY indicator for the reset switch
+assign LEDR[8] = downCount_Complete;	//TEMPORARY indicator for the downCount_Complete boolean 1=count complete
+//assign LEDR[7:0] = LFSR_Value[7:0];	//TEMPORARY indicator to verify the operation of the LSFR_Value module (Pseudo-Random number generator)
+assign LEDR[7:0] = count[7:0];			//TEMPORARY indicator to verify the operation of the down_Counter module
 
 //Instantiates an instance of SevenSegment.v
 //This is the decoder which translates BCD values into binary values that light the correct segments in the 7-segment display
@@ -70,22 +82,8 @@ Slow_Clock Slow_Clock_INST1(MAX10_CLK1_50, Slow_Clock);
 LFSR LFSR_INST1(Slow_Clock, LFSR_Value);
 
 //instantiates an instance of down_Counter
-//down_Counter down_Counter_INST1(Slow_Clock, LFSR_Value, RESET, ENABLE, count, downCount_Complete);
-down_Counter down_Counter_INST1(Slow_Clock, 8'b00000011, RESET, ENABLE, count, downCount_Complete);
+down_Counter down_Counter_INST1(Slow_Clock, LFSR_Value, RESET, ENABLE, count, downCount_Complete);
+//down_Counter down_Counter_INST1(Slow_Clock, 8'b00000011, RESET, ENABLE, count, downCount_Complete);
 
-assign HEX0[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
-assign HEX1[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
-assign HEX2[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
-assign HEX3[7] = 1'b0;						//Turns ON the decimal point for the 7-segment display
-assign HEX4[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
-assign HEX5[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
-
-assign HEX4 = 8'b11111111;					//Blanks digit 4 of the 7-segment display
-assign HEX5 = 8'b11111111;					//Blanks digit 5 of the 7-segment display
-
-assign LEDR[9] = !KEY[0];					//TEMPORARY indicator for the reset switch
-assign LEDR[8] = downCount_Complete;	//TEMPORARY indicator for the downCount_Complete boolean 1=count complete
-//assign LEDR[7:0] = LFSR_Value[7:0];	//TEMPORARY indicator to verify the operation of the LSFR_Value module (Pseudo-Random number generator)
-assign LEDR[7:0] = count[7:0];			//TEMPORARY indicator to verify the operation of the down_Counter module
 
 endmodule
