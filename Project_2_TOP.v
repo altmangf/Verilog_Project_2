@@ -88,7 +88,7 @@ begin
 		//display High Score
 		end
 
-	else if(A == 3'b001 && downCount_Complete == 0)begin
+	else if(A == 3'b001 && downCount_Complete == 0 && KEY[0] == 1'b0)begin  //
 		downCounter_Enable <= 1'b1;
 		A <= 3'b010;
 		downCount_Value = LFSR_Value;
