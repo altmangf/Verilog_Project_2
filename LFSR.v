@@ -1,6 +1,7 @@
 //Gabriel Altman
 //ECEN2350 Digital Logic
 //April, 2018
+//Based on code from http://www.fpga4fun.com/Counters3.html
 
 module LFSR(CLK1, LFSROutput);
 
