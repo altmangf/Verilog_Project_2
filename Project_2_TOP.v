@@ -25,11 +25,11 @@ input	[9:0]	SW;								//Switches
 
 output	[9:0]	LEDR;							//LED's (Surface mounted) 
 output	[7:0]	HEX0;							//Seven segment display 0
-output	[7:0]	HEX1;							//Seven segment display 0
-output	[7:0]	HEX2;							//Seven segment display 0
-output	[7:0]	HEX3;							//Seven segment display 0
-output	[7:0]	HEX4;							//Seven segment display 0
-output	[7:0]	HEX5;							//Seven segment display 0
+output	[7:0]	HEX1;							//Seven segment display 1
+output	[7:0]	HEX2;							//Seven segment display 2
+output	[7:0]	HEX3;							//Seven segment display 3
+output	[7:0]	HEX4;							//Seven segment display 4
+output	[7:0]	HEX5;							//Seven segment display 5
 
 reg [1:0]CLEAR;								//Boolean to clear the BCD Counter
 wire [1:0]RESET;								//Reset boolean
@@ -47,15 +47,13 @@ wire [3:0]display2;							//Carries the BCD values from the MUX to the decoder
 wire [3:0]display1;							//Carries the BCD values from the MUX to the decoder
 wire [3:0]display0;							//Carries the BCD values from the MUX to the decoder
 
-reg [1:0]ENABLE;								//Enable boolean
-reg [1:0]counter_Enable;					//boolean to enable the counter
-reg [1:0]downCounter_Enable;				//boolean to enable the down_Counter
+reg counter_Enable;							//boolean to enable the counter
+reg downCounter_Enable;						//boolean to enable the down_Counter
 reg [15:0]highScore;							//High score
 reg [15:0]currentScore;						//current score
 reg [2:0]A;										//Current state of Finite State Machine
 reg downCount_Boolean;						//count complete=1  count running=0
-reg downCount_Value;							//The LFSR value assigned to the down counter
-reg [1:0]displayState;						//Controls the output of display_MUX. 0 = display current score, 1 = display High Score 
+reg displayState;								//Controls the output of display_MUX. 0 = display current score, 1 = display High Score 
  
 assign RESET[0] = SW[0];					//Toggles the RESET boolean
 assign HEX0[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
@@ -100,7 +98,6 @@ begin
 	else if(A == 3'b001 && downCount_Complete == 0 && KEY[0] == 1'b0)begin  //
 		downCounter_Enable <= 1'b1;
 		A <= 3'b010;
-		downCount_Value = LFSR_Value;
 		CLEAR[0]=1'b1;							//Clears the hex display by resetting values to 0								
 		displayState <= 0;
 		end
@@ -119,8 +116,9 @@ begin
 		downCounter_Enable <=0;
 		A <= 3'b000;
 		displayState <= 0;	
-			if({BCD3,BCD2,BCD1,BCD0} < highScore[15:0])
-			highScore[15:0] = {BCD3,BCD2,BCD1,BCD0};
+			if(highScore[15:0] > {BCD3[3:0],BCD2[3:0],BCD1[3:0],BCD0[3:0]})begin
+			highScore[15:0] <= {BCD3[3:0],BCD2[3:0],BCD1[3:0],BCD0[3:0]};
+			end
 		end
 end		
 		

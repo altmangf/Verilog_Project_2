@@ -32,5 +32,11 @@ always@(displayState)begin
 		Display1 = HS1;
 		Display0 = HS0;
 		end
+	else begin	
+		Display3 = BCD3;
+		Display2 = BCD2;
+		Display1 = BCD1;
+		Display0 = BCD0;
+		end
 end
 endmodule
