@@ -18,7 +18,7 @@ output reg [25:0]clock_Count;
 always@(posedge clock) 
 	begin
 	clock_Count <= clock_Count + 1;
-	if (clock_Count == 500000)
+	if (clock_Count == 250000)
 		begin
 		clock_Count <= 0;
 		//div <= !div;

@@ -3,14 +3,14 @@
 //April, 2018
 //Based on code from the textbook
 
-module BCD_counter (Clock, Clear, ENABLE, BCD3, BCD2, BCD1, BCD0);
+module BCD_counter (Clock, Reset, Clear, ENABLE, BCD3, BCD2, BCD1, BCD0);
 
-input Clock, Clear, ENABLE;
+input Clock, Reset, Clear, ENABLE;
 output reg [3:0] BCD3, BCD2, BCD1, BCD0;
 
 always @(posedge Clock)
 	begin
-		if (Clear)
+		if (Clear || Reset)
 			begin
 			BCD3 <= 0;
 			BCD2 <= 0;
