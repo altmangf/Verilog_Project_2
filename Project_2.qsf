@@ -203,7 +203,6 @@ set_global_assignment -name VERILOG_FILE Project_2_TOP.v
 set_global_assignment -name VERILOG_FILE LFSR.v
 set_global_assignment -name VERILOG_FILE BCD_counter.v
 set_global_assignment -name VERILOG_FILE BCD_decoder.v
-set_global_assignment -name VERILOG_FILE Slow_Clock.v
 set_global_assignment -name VERILOG_FILE down_Counter.v
 set_global_assignment -name POWER_PRESET_COOLING_SOLUTION "23 MM HEAT SINK WITH 200 LFPM AIRFLOW"
 set_global_assignment -name POWER_BOARD_THERMAL_MODEL "NONE (CONSERVATIVE)"

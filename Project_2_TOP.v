@@ -64,28 +64,28 @@ assign HEX4[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment disp
 assign HEX5[7] = 1'b1;						//Turns OFF the decimal point for the 7-segment display
 assign HEX4 = 8'b11111111;					//Blanks digit 4 of the 7-segment display
 assign HEX5 = 8'b11111111;					//Blanks digit 5 of the 7-segment display
+
 assign LEDR[9] = SW[0];						//indicator for the reset switch
 assign LEDR[8] = downCounter_Enable;	//indicator for the downCount_Complete boolean 1=count complete
-assign LEDR[7] = counter_Enable;			//indicator for the downCount_Complete boolean 1=count complete
+assign LEDR[7] = counter_Enable;			//indicator for the counter_Enable boolean 1=count complete
 assign LEDR[6] = displayState;			//indicator for the displayState. 0 = display current score, 1 = display High Score 
 assign LEDR[5] = downCount_Complete;	//indicator for the downCount_Complete boolean 1=count complete
 assign LEDR[4] = downCount_Complete;	//indicator for the downCount_Complete boolean 1=count complete
 assign LEDR[3] = downCount_Complete;	//indicator for the downCount_Complete boolean 1=count complete
 assign LEDR[2:0] = A[2:0];					//TEMPORARY indicator to show current state of FSM 
+	
+//assign LEDR[7:0] = LFSR_Value[7:0];		//TEMPORARY indicator to show LFSR values to make a histogram for the report
 
-
-always@(A, KEY[1], KEY[0], SW[0], downCount_Boolean, downCount_Complete)
+always@(A, KEY[1], KEY[0], SW[0], downCount_Complete)
 begin
 	if(SW[0]==1)begin							//RESET ALL CONDITIONS
 		highScore <= 0;
 		A<=3'b000;
 		counter_Enable <= 0;
 		downCounter_Enable <= 0;
-		downCount_Boolean <= 0;
 		displayState <= 0;
-		//highScore <= 16'b1001100001110110;
-		//highScore <= 16'b1001100110011001;
-		highScore <= 16'b0000000000000000;
+		highScore <= 16'b1001100110011001;
+		//highScore <= 16'b0000000000000000;
 		end
 
 	if(A == 3'b000 && SW[0] ==1'b0 && KEY[1] == 1'b0)begin
@@ -105,7 +105,6 @@ begin
 	else if(A == 3'b010 && downCount_Complete == 1)begin
 		CLEAR[0]=1'b0;							//Clears the hex display by resetting values to 0	
 		counter_Enable <= 1;
-		downCount_Boolean <= 0;
 		downCounter_Enable <=0;
 		A <= 3'b011;
 		displayState <= 0;
@@ -141,9 +140,10 @@ BCD_counter BCD_Count_INST1(divided_Clock, RESET, CLEAR, counter_Enable, BCD3, B
 //This clock divides the native 50MHz clock by 25,000 to yield a 2kHz clock
 clock_Divider clk_Div_INST1(MAX10_CLK1_50, divided_Clock);
 
-//Instantiates an instance of Slow_Clock
-//This clock divides the native 50MHz clock by 50,000,000 to yield a 1Hz clock
-Slow_Clock Slow_Clock_INST1(MAX10_CLK1_50, Slow_Clock);
+//Instantiates an instance of Clock_divider
+//This clock divides the native 50MHz clock by 250,000 to yield a 200Hz clock
+clock_Divider #(250000) Slow_Clock_INST1(MAX10_CLK1_50, Slow_Clock);
+//clock_Divider #(10000000) Slow_Clock_INST1(MAX10_CLK1_50, Slow_Clock);
 
 //Instantiates an instance  of LFSR 
 //Generates pseudo random numbers to set the delay between pressing the start button, and the start of the timer/start indicator light
